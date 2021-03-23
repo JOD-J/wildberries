@@ -41,4 +41,3 @@ scrollLinks.forEach((item, index) => {
 	})
 });
 
-console.log(123123);
