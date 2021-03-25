@@ -30,6 +30,7 @@ modalCart.addEventListener('click', (e) => {
 
 // общий скрол
 const scrollTop = (elem) => {
+	console.log('elem: ', elem);
 	const idScroll = elem.getAttribute('href')
 	document.querySelector(idScroll).scrollIntoView({
 		behavior: 'smooth',
@@ -51,6 +52,9 @@ scrollLinks.forEach((item, index) => {
 const more = document.querySelector('.more');
 const navigationLinks = document.querySelectorAll('.navigation-link');
 const longGoodsList = document.querySelector('.long-goods-list');
+const accessoriesAll = document.querySelector('.accessories-all');
+const clothingAll = document.querySelector('.clothing-all');
+const buttons = document.querySelectorAll('.button');
 
 const getGoods = async () => {
 	const result = await fetch('db/db.json')
@@ -87,12 +91,6 @@ const renderCards = (data) => {
 	document.body.classList.add('show-goods')
 };
 
-more.addEventListener('click', (event) => {
-	event.preventDefault();
-	getGoods().then(renderCards)
-	scrollTop(more);
-});
-
 const filterCards = (field, value) => {
 	getGoods().then((data) => {
 		const filterdGoods = data.filter((good) =>{
@@ -114,4 +112,25 @@ navigationLinks.forEach((linlk) => {
 		const value = linlk.textContent;
 		filterCards(field, value);
 	});
+});
+
+more.addEventListener('click', (event) => {
+	event.preventDefault();
+	getGoods().then(filterCards())
+	scrollTop(more);
+});
+
+
+buttons.forEach(btn => {
+	btn.addEventListener('click', e => {		
+		e.preventDefault();
+		if(e.target.closest('.card-1')){
+			filterCards("category", "Accessories");
+			scrollTop(accessoriesAll);
+		}
+		if(e.target.closest('.card-2')){
+			filterCards("category", "Clothing");
+			scrollTop(clothingAll);
+		}
+	})
 });
